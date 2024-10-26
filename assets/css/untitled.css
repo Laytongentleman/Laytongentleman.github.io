@@ -1,3 +1,22 @@
 .masthead {
 }
 
+@media (min-width: 1200px) {
+  ul {
+  }
+}
+
+
+
+
+
+.myheader{
+  width: 200rem;
+  display: flex;
+  justify-content: space-around;
+
+}
+.row {
+  justify-content: space-evenly;
+}
+
