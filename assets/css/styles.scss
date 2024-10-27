@@ -35,6 +35,7 @@
     border-radius:30px;
     
     &:before {
+        
       content: "";
       z-index: 1;
       position: absolute;
@@ -60,10 +61,17 @@
     }
     
     &:hover {
+        transform: translateZ(0) scale(1.2) ;
+        transition: transform 0.2s;
+        @supports(filter: url('#goo')) {
+          transform: translateZ(0) scale(1.1);
+        }
       color: $dark;
       border-radius:30px;
+   
       
       &:after {
+
         transition: all 0.3s;
         left: 0;
         top: 0;
@@ -131,6 +139,8 @@
         
         .blob-btn:hover & {
           transform: translateZ(0) scale(1.7);
+     
+      
           
           @supports(filter: url('#goo')) {
             transform: translateZ(0) scale(1.4);

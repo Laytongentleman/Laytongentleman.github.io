@@ -17,7 +17,7 @@
   margin-bottom: 30px;
   text-align: center;
   text-transform: uppercase;
-  color: #0505A9;
+  color: #000000;
   font-size: 16px;
   font-weight: bold;
   background-color: transparent;
@@ -50,8 +50,15 @@
   border-radius: 30px;
 }
 .blob-btn:hover {
+  transform: translateZ(0) scale(1.2);
+  transition: transform 0.2s;
   color: #FFFFFF;
   border-radius: 30px;
+}
+@supports (filter: url("#goo")) {
+  .blob-btn:hover {
+    transform: translateZ(0) scale(1.1);
+  }
 }
 .blob-btn:hover:after {
   transition: all 0.3s;
@@ -72,7 +79,7 @@
 }
 .blob-btn__blobs {
   position: relative;
-  display: block;
+  display: inline-block;
   height: 100%;
   filter: url("#goo");
 }
@@ -86,7 +93,7 @@
 }
 .blob-btn__blobs {
   position: relative;
-  display: block;
+  display: inline-block;
   height: 100%;
   filter: url("#goo");
 }
