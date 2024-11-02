@@ -25,7 +25,7 @@
         <div class="container"><button data-bs-toggle="collapse" class="navbar-toggler d-none" data-bs-target="#"></button>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav sidebar-nav" id="sidebar-nav">
-                    <li class="nav-item sidebar-brand"><a class="nav-link active" href="#page-top">Brand</a></li>
+                    <li class="nav-item sidebar-brand"><a class="nav-link active" href="#page-top">Home page Navigator</a></li>
                     <li class="nav-item sidebar-nav-item"><a class="nav-link" href="#page-top">Home</a></li>
                     <li class="nav-item sidebar-nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item sidebar-nav-item"><a class="nav-link" href="#services">Services</a></li>
@@ -36,14 +36,15 @@
         </div>
     </nav>
 
-    <header class="d-flex justify-content-center py-3" style="background-color: rgba(0, 0, 0, 0.425);" >
+    <header class="d-flex justify-content-center py-3" style="background-color: rgba(0, 0, 0, 0);" >
         <ul class="nav nav-pills myheader">
-          <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Skills</a></li>
+          <li class="nav-item"><a href="#" class="nav-link active shaking" aria-current="page">Home</a></li>
+          <li class="nav-item"><a href="#about" class="nav-link">About me</a></li>
+          <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Civic Engagement</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Mobility</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Career Management</a></li>
+          <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </header>
     <header class=" masthead" style="background-image:url('assets/img/pokemoncity.png'); background-size:cover; padding: 0;">
@@ -61,7 +62,57 @@
     </header>
         
     </header>
-    <section id="about" class="content-section bg-light" style="padding-top: 0rem; padding-bottom: 3rem;background-repeat: no-repeat;">
+    <section id="about" class="content-section bg-light text-black text-center" style="padding-top: 0rem; padding-bottom: 3rem;background-repeat: no-repeat;">
+      <div  style=" background-repeat: no-repeat; background-size:cover;">
+      
+        <h1 class="mb-1" style="padding-top: 1rem; text-align: center;"><span style="font-style: normal !important; font-size:3rem; color: rgb(0, 0, 0);">About me&nbsp;</span></h1>  
+        <p>
+          I'm a 20 years old french engineering student at N7 (ENSEEIHT) specializing in Computer Science. <br> I'm interested in software development, artificial intelligence and cybersecurity.
+        </p>
+        <div class="container">
+          <div class="content-section-heading text-center">
+              
+          </div>
+          <div class="row g-0">
+              <div class="col-lg-6"><a class="portfolio-item" href="#">
+                      <div class="caption" style="background-image: url(&quot;assets/img/citynighttrainlowqual.gif&quot;);background-repeat: no-repeat;background-size: cover;">
+                          <div class="caption-content">
+                              <h2>Stationary</h2>
+                              <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
+                          </div>
+                      </div><img class="img-fluid" src="assets/img/portfolio-1.jpg">
+                  </a></div>
+              <div class="col-lg-6"><a class="portfolio-item" href="#">
+                      <div class="caption" style="background-image: url(&quot;assets/img/pokemoninfrontofisland.gif&quot;)à;">
+                          <div class="caption-content">
+                              <h2>Ice Cream</h2>
+                              <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
+                          </div>
+                      </div><img class="img-fluid" src="assets/img/portfolio-2.jpg">
+                  </a></div>
+              <div class="col-lg-6"><a class="portfolio-item" href="#">
+                      <div class="caption">
+                          <div class="caption-content">
+                              <h2>Strawberries</h2>
+                              <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on top!</p>
+                          </div>
+                      </div><img class="img-fluid" src="assets/img/portfolio-3.jpg">
+                  </a></div>
+              <div class="col-lg-6"><a class="portfolio-item" href="#">
+                      <div class="caption">
+                          <div class="caption-content">
+                              <h2>Workspace</h2>
+                              <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
+                          </div>
+                      </div><img class="img-fluid" src="assets/img/portfolio-4.jpg">
+                  </a></div>
+          </div>
+      </div>
+      </div>
+
+      
+  </section>
+    <section id="contact" class="content-section bg-light" style="padding-top: 0rem; padding-bottom: 3rem;background-repeat: no-repeat;">
         <div  style="background-image: url('assets/img/trainsnowsolo.gif'); background-repeat: no-repeat; background-size:cover;">
         <h1 class="mb-1" style="padding-top: 1rem; text-align: center;"><span style="font-style: normal !important; font-size:3rem; color: rgb(0, 0, 0);">Contact &nbsp;</span></h1>
        
@@ -247,11 +298,7 @@
             </div>
         </div>
     </section>
-    <section class="callout" style="background:linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), url(&quot;assets/img/bg-callout.jpg&quot;);background-position:center center;background-repeat:no-repeat;background-size:cover;">
-        <div class="container text-center">
-            <h2 class="mx-auto mb-5"><span>Welcome to&nbsp;</span><em>your</em><span><br>next website!<br></span></h2><a class="btn btn-primary btn-xl" role="button" href="#">Download Now!</a>
-        </div>
-    </section>
+   
     <section id="portfolio" class="content-section">
         <div class="container">
             <div class="content-section-heading text-center">
@@ -296,53 +343,9 @@
         </div>
     </section>
     <section id="portfolio-1" class="content-section">
-        <div class="container">
-            <div class="content-section-heading text-center">
-                <h3 class="text-secondary mb-0">Portfolio</h3>
-                <h2 class="mb-5">Who am I</h2>
-            </div>
-            <div class="row g-0">
-                <div class="col-lg-6"><a class="portfolio-item" href="#">
-                        <div class="caption" style="background-image: url(&quot;assets/img/citynighttrainlowqual.gif&quot;);background-repeat: no-repeat;background-size: cover;">
-                            <div class="caption-content">
-                                <h2>Stationary</h2>
-                                <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
-                            </div>
-                        </div><img class="img-fluid" src="assets/img/portfolio-1.jpg">
-                    </a></div>
-                <div class="col-lg-6"><a class="portfolio-item" href="#">
-                        <div class="caption" style="background-image: url(&quot;assets/img/pokemoninfrontofisland.gif&quot;)à;">
-                            <div class="caption-content">
-                                <h2>Ice Cream</h2>
-                                <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
-                            </div>
-                        </div><img class="img-fluid" src="assets/img/portfolio-2.jpg">
-                    </a></div>
-                <div class="col-lg-6"><a class="portfolio-item" href="#">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <h2>Strawberries</h2>
-                                <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on top!</p>
-                            </div>
-                        </div><img class="img-fluid" src="assets/img/portfolio-3.jpg">
-                    </a></div>
-                <div class="col-lg-6"><a class="portfolio-item" href="#">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <h2>Workspace</h2>
-                                <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
-                            </div>
-                        </div><img class="img-fluid" src="assets/img/portfolio-4.jpg">
-                    </a></div>
-            </div>
-        </div>
+
     </section>
-    <section class="content-section bg-primary text-white">
-        <div class="container text-center">
-            <h2 class="mb-4">The buttons below are impossible to resist..</h2><a class="btn btn-light btn-xl me-4" role="button" href="#">Click Me!</a><a class="btn btn-dark btn-xl me-4" role="button" href="#">Look at Me</a>
-        </div>
-    </section>
-    <section id="contact" class="map"><iframe allowfullscreen="" frameborder="0" src="https://cdn.bootstrapstudio.io/placeholders/map.html" width="100%" height="400"></iframe></section>
+ 
     <footer class="footer text-center">
         <div class="container">
             <p class="text-muted mb-0 small">Copyright &nbsp;© Brand 2024</p>
