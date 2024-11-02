@@ -43,7 +43,7 @@
   .blob-btn-linkedin:hover {
     color: #FFFFFF;
     border-radius: 30px;
-    transform: translateZ(0) scale(1.2) ;
+    
     transition: transform 0.2s;
   }
   .blob-btn-linkedin:hover:after {
@@ -73,7 +73,6 @@
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
     border-radius: 30px;
     background: #ffffff;
   }

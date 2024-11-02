@@ -199,6 +199,11 @@
   margin-left: 2em;
   margin-right:2em;
 }
+html {
+  overflow-x: hidden;
+
+}
+html, body {  scroll-behavior: smooth;width: auto!important; overflow-x: hidden!important;} 
 
 @keyframes tilt-n-move-shaking {
   0% { transform: translate(0, 0) rotate(0deg); }
@@ -212,3 +217,6 @@
   animation: tilt-n-move-shaking 1s infinite;
 }
 
+
+.grow {   transition: all 0.3s ease-in-out;}
+.grow:hover { transform: scale(1.1); }
