@@ -194,7 +194,7 @@
 
 .mygrid{
   display: grid;
-  grid-template-columns:  16% 16% 18% 18% 16% 16%;
+  grid-template-columns:  20% 20% 20% 20% 20% 20%;
   grid-template-rows: 16% 16% 16% 18% 18% 16%;
   margin-left: 2em;
   margin-right:2em;
@@ -220,3 +220,8 @@ html, body {  scroll-behavior: smooth;width: auto!important; overflow-x: hidden!
 
 .grow {   transition: all 0.3s ease-in-out;}
 .grow:hover { transform: scale(1.1); }
+
+.body{
+  opacity: 0;
+  transition: opacity .5s;
+}
