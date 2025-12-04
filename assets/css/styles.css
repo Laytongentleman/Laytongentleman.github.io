@@ -136,3 +136,7 @@
     transform: translateZ(0) scale(1.4);
   }
 }/*# sourceMappingURL=styles.css.map */
+
+.nav-item{
+  font-weight: bold;
+}
