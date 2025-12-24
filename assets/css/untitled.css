@@ -7,7 +7,10 @@
 }
 
 
+html *{
+    font-family: JetBrains Mono, monospace;
 
+}
 
 
 .myheader{
@@ -28,7 +31,7 @@
 
 .button a{
   color:white;
-  font-family:Helvetica, sans-serif;
+  font-family: "JetBrains Mono", monospace;
   font-weight:bold;
   font-size:36px;
   text-align: center;
@@ -148,7 +151,8 @@
 }
 
 .typewriter1 {
-  --caret: green;
+  font-family: "JetBrains Mono", monospace;
+  --caret: #167C55;
 }
 
 .typewriter1::before {
