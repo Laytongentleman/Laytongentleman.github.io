@@ -1,0 +1,3 @@
+- navigateur centré verticalement qui se développe vers la gauche
+- button learn more about me en 3D effet jv comme yolwoocle
+- hover sur les buttons onglets navigation
