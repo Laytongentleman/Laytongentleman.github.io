@@ -2,6 +2,15 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+#searchInput2{
+  width: 50%;
+}
+#searchContainer2{
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
 #searchInput{
   width: 50%;
 }
