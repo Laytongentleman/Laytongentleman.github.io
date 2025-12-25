@@ -152,7 +152,7 @@ html *{
 
 .typewriter1 {
   font-family: "JetBrains Mono", monospace;
-  --caret: #167C55;
+  --caret: #006666;
 }
 
 .typewriter1::before {

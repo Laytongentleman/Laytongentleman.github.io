@@ -1,3 +1,6 @@
+body {
+  scrollbar-width: none;
+}
 .contactSection {
   height: 10rem;
   display: flex;
@@ -113,7 +116,7 @@
   top: 2px;
   width: 25%;
   height: 100%;
-  background: #0505A9;
+  background: black;
   border-radius: 100%;
   transform: translate3d(0, 150%, 0) scale(1.7);
   transition: transform 0.45s;
@@ -195,5 +198,96 @@
 
 .project-card:hover .project-card__img {
   transform: scale(1.05);
+}
+
+
+/* Index sidebar */
+/* Toggle button */
+.index-toggle-btn {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 64px;
+  border: none;
+  background-color: black; /* Bootstrap primary */
+    border: 2px solid #ffffff; /* ← change color here */
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 1050;
+  border-radius: 8px 0 0 8px;
+  transition: right 0.3s ease;
+}
+
+/* Index panel */
+.page-index {
+  position: fixed;
+  top: 50%;
+  right: -260px;          /* hidden */
+  transform: translateY(-50%);
+  width: 260px;
+  height: 260px;
+  background-color: black;
+  border: 1px solid #ddd;
+  border-radius: 8px 0 0 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease;
+  z-index: 1040;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+}
+
+/* OPEN STATE */
+.page-index.open {
+  right: 0;
+}
+
+.page-index.open + .index-toggle-btn,
+.index-toggle-btn.open {
+  right: 260px; /* panel width */
+}
+
+/* Links */
+.page-index a {
+  display: block;
+  text-decoration: none;
+}
+
+
+.index-link {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+
+  background-color: black;
+  color: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+
+  text-decoration: none;
+
+  transition: background-color 0.2s ease,
+              transform 0.05s ease;
+}
+
+.index-link:hover,
+.index-link:active,
+.index-link:focus,
+.index-link:focus-visible {
+  text-decoration: none;
+}
+
+.index-link:active {
+  transform: scale(0.98);
+  text-decoration: none;
+
 }
 

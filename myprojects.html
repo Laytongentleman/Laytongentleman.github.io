@@ -24,23 +24,8 @@
 
 </head>
 
-<body id="page-top" style=" background-color : rgb(0,0,0,255) "><a class="bg-dark menu-toggle rounded" href="#"><i class="fa fa-bars"></i></a>
-    <nav class="navbar navbar-expand " id="sidebar-wrapper" style="background-color: rgba(0, 0, 0, 255);">
-        <div class="container"><button data-bs-toggle="collapse" class="navbar-toggler d-none" ></button>
-        <div class="collapse navbar-collapse " style="background-color: rgba(0, 0, 0, 255);">
-          <ul class="navbar-nav sidebar-nav " id="sidebar-nav" style="background-color: rgba(0, 0, 0, 255);">
-                    <li class="nav-item sidebar-brand text-center"><a class="nav-link active" href="#page-top">Navigator</a></li>
-                    <li class="nav-item sidebar-nav-item text-center"><a class="nav-link" href="#page-top">Home</a></li>
-                    <li class="nav-item sidebar-nav-item text-center"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item sidebar-nav-item text-center"><a class="nav-link" href="#services">Services</a></li>
-                    <li class="nav-item sidebar-nav-item text-center"><a class="nav-link" href="#portfolio">Portfolio</a></li>
-                    <li class="nav-item sidebar-nav-item text-center"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <header class="d-flex justify-content-center py-3 " style="background-color: rgba(0, 0, 0, 255);" >
+<body id="page-top" style=" background-color : rgb(0,0,0,255) ">
+    <header id="top" class="d-flex justify-content-center py-3 " style="background-color: rgba(0, 0, 0, 255);" >
         <ul class="nav nav-pills myheader">
           <li class="nav-item"><a href="index.html" class="nav-link active  bg-dark" aria-current="page">Home</a></li>
           <li class="nav-item"><a href="index.html#about" class="nav-link active  bg-dark" >About Me</a></li>
@@ -140,7 +125,7 @@
 
           <div class="caption-content" style="background-color: rgba(0, 0, 0, 0.7); padding: 1rem; border-radius: 10px;">
         
-                <h2 class=" mb-0 text-secondary"  : Tomato">School Projects</h2>
+                <h2 id="school" class=" mb-0 text-secondary"  : Tomato">School Projects</h2>
         </div>
 
       <div class="mb-4" id="searchContainer">
@@ -180,11 +165,11 @@
           </div>
 
  <div class="card event-card ">
-          <img src="/assets/infobahnCtf.png" height="200" "Participation à l'infobahn CTF" />
+          <img src="assets/img/nexys4DDR.jpg" height="200" "Architectur of a Nexys4DDR FPGA" />
           <div class="card-body text-center">
-              <h5 class="card-title "> Participation à l'infobahn CTF </h5> 
-              <p class="card-text ">07/11/2025 </br> </p>
-            <a href="https://ctftime.org/event/2878" target="_blank" class="btn btn-outline-light btn-sm mt-2">Voir </a>
+              <h5 class="card-title "> Programmation of a Nexys4DDR FPGA </h5> 
+              <p class="card-text "> November 2025 - January 2026 </br> with Arthur Morain </p>
+            <a href="https://github.com/Laytongentleman/projetArchiASR" target="_blank" class="btn btn-outline-light btn-sm mt-2">Github</a>
 
 
         </div>
@@ -323,7 +308,7 @@
 
           <div class="caption-content" style="background-color: rgba(0, 0, 0, 0.7); padding: 1rem; border-radius: 10px;">
         
-                <h2 class=" mb-0 text-secondary"  : Tomato">Personnal Projects</h2>
+                <h2 id="personnal" class=" mb-0 text-secondary"  : Tomato">Personnal Projects</h2>
         </div>
 
       <div class="mb-4" id="searchContainer2">
@@ -599,6 +584,20 @@ const cardWidth = card.offsetWidth +16;
 
       }
   </script>
+<!-- Right Sidebar Index -->
+<button id="indexToggleBtn" class="index-toggle-btn">
+  &lt;
+</button>
+  <div id="pageIndex" class="page-index">
+  <!-- <h6 class="text-center mt-2">On this page</h6> -->
+  <ul class="list-unstyled px-3">
+    <li><a class="index-link" href="#top">Current Projects</a></li>
+    <li><a class="index-link" href="#school">School Projects</a></li>
+    <li><a  class="index-link" href="#personnal">Personnal Projects</a></li>
+  </ul>
+</div>
+
+    <script src="assets/js/myIndex.js"></script>
 </body>
 
 </html>
