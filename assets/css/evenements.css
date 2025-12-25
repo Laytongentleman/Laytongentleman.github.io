@@ -136,8 +136,21 @@
     .carousel-container {
       position: relative;
       width: 90%;
+      display:inline-block;
       /* height: 120%; */
     }
+    .carousel-current{
+
+
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      gap: 1rem;
+      scrollbar-width: none;
+      justify-content: center;
+      align-items: center;
+   
+}
 
     .carousel-scroll {
 
