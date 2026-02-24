@@ -7,193 +7,272 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pocketbase/0.21.1/pocketbase.umd.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
     <style>
-        :root { --bg: #0f0f0f; --card: #1a1a1a; --accent: crimson; --text: #eeeeee; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
+        :root { --bg: #0f0f0f; --card: #1a1a1a; --accent: crimson; --text: #eeeeee; --input-bg: #252525; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* Login Screen */
-        #login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
-        .login-box { background: var(--card); padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #333; }
-        input { padding: 12px; margin-bottom: 15px; background: #222; color: white; border: 1px solid #333; border-radius: 8px; width: 220px; display: block; }
-        button { padding: 12px 25px; background: var(--accent); border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; }
-
-        /* Blog Layout */
-        #posts-tab { display: none; flex-direction: column; gap: 50px; width: 70%; margin: 0 auto; padding-bottom: 100px; }
-        .post-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #222; width: 100%; position: relative; }
-        
-        /* Carousel Styles */
-        .slider-container { position: relative; width: 100%; overflow: hidden; }
-        .slider { 
-            display: flex; 
-            overflow-x: auto; 
-            scroll-snap-type: x mandatory; 
-            scrollbar-width: none; 
-            scroll-behavior: smooth;
+        /* Navigation */
+        .sticky-nav { 
+            position: sticky; top: 0; z-index: 1000; 
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid #333; display: none;
+            justify-content: space-between; align-items: center; padding: 10px 5%;
         }
+        .nav-logo { font-weight: 800; color: var(--accent); font-size: 1.2rem; }
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-btn { background: none; border: none; color: #888; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .nav-btn.active { color: var(--accent); }
+
+        /* Auth Screen */
+        #login-screen { display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .auth-box { background: var(--card); padding: 40px; border-radius: 20px; border: 1px solid #333; width: 350px; text-align: center; }
+        input { padding: 14px; margin-bottom: 12px; background: var(--input-bg); color: white; border: 1px solid #333; border-radius: 10px; width: 100%; box-sizing: border-box; }
+        .primary-btn { padding: 14px; background: var(--accent); border: none; color: white; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; }
+        .request-btn { background: none; border: none; color: #666; cursor: pointer; margin-top: 15px; text-decoration: underline; font-size: 0.85rem; }
+
+        /* Layout 50% */
+        .tab-content { display: none; width: 50vw; max-width: 900px; margin: 40px auto; padding-bottom: 100px; }
+        .active-tab { display: flex; flex-direction: column; }
+
+        /* Post Card & Carousel */
+        .post-card { background: var(--card); border-radius: 24px; overflow: hidden; border: 1px solid #222; margin-bottom: 60px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .slider-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+        .slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; height: 100%; }
         .slider::-webkit-scrollbar { display: none; }
-        .slider img { width: 100%; flex-shrink: 0; scroll-snap-align: start; object-fit: cover; aspect-ratio: 4/3; }
+        .slider img { width: 100%; height: 100%; flex-shrink: 0; scroll-snap-align: start; object-fit: cover; cursor: zoom-in; }
+        
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 15px 20px; cursor: pointer; font-size: 20px; border-radius: 50%; z-index: 10; opacity: 0; transition: 0.3s; }
+        .slider-wrapper:hover .nav-arrow { opacity: 1; }
+        .prev-arrow { left: 15px; }
+        .next-arrow { right: 15px; }
 
-        /* Navigation Arrows */
-        .nav-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(0,0,0,0.6); color: white; border: none;
-            padding: 20px 15px; cursor: pointer; z-index: 5; transition: 0.3s;
-            font-size: 20px; border-radius: 0 5px 5px 0;
-        }
-        .next-arrow { right: 0; border-radius: 5px 0 0 5px; }
-        .nav-arrow:hover { background: var(--accent); }
+        .dots-container { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
+        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 50%; }
+        .dot.active { background: var(--accent); width: 20px; border-radius: 4px; transition: 0.3s; }
 
-        /* Navigation Dots */
-        .dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 5; }
-        .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; transition: 0.3s; }
-        .dot.active { background: var(--accent); transform: scale(1.3); }
+        .post-body { padding: 35px; line-height: 1.8; font-size: 1.1rem; }
+        .audio-bar { background: #111; padding: 25px; display: flex; flex-direction: column; align-items: center; gap: 10px; border-top: 1px solid #333; }
+        .play-btn { background: var(--accent); border: none; color: white; padding: 12px 30px; border-radius: 40px; cursor: pointer; font-weight: bold; }
 
-        /* Content Styles */
-        .post-header { padding: 15px; background: #222; text-align: center; font-weight: bold; border-bottom: 1px solid #333; }
-.post-body { 
-    padding: 30px; 
-    line-height: 1.7; 
-    font-size: 1.15em; 
-    color: #ccc; 
-    /* AJOUTE CETTE LIGNE : */
-    white-space: pre-wrap; 
-}
-        /* Audio Bar */
-        .audio-bar { background: #111; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; border-top: 1px solid #333; }
-        .song-title { font-size: 0.8em; color: #777; font-style: italic; text-align: center; }
-        .play-btn { background: var(--accent); border: none; color: white; padding: 12px 25px; border-radius: 40px; cursor: pointer; font-weight: bold; }
-        .hidden-video { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+        /* Focus Mode (Lightbox) */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
+        #lightbox-content { width: 85vw; height: 80vh; position: relative; }
+        #lightbox .slider-wrapper { height: 100%; aspect-ratio: auto; }
+        #lightbox .slider img { object-fit: contain; cursor: zoom-out; }
+        #lightbox .nav-arrow { opacity: 1; pointer-events: auto; }
+        .close-lb { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; z-index: 2100; }
 
-        @media (max-width: 768px) { #posts-tab { width: 95%; } .nav-arrow { display: none; } }
+        .comments-section { background: #151515; padding: 30px; border-top: 1px solid #333; }
+        .comment-item { display: flex; gap: 15px; margin-bottom: 20px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #333; }
+        .comment-content { background: #222; padding: 12px 18px; border-radius: 18px; flex: 1; border: 1px solid #333; }
+
+        @media (max-width: 1024px) { .tab-content { width: 95vw; } .nav-arrow { display: none; } }
     </style>
 </head>
 <body>
 
+    <nav class="sticky-nav" id="sticky-nav">
+        <div class="nav-logo">Louis in Korea</div>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="switchTab('posts')">Posts</button>
+            <button class="nav-btn" onclick="switchTab('config')">Config</button>
+            <button class="nav-btn" onclick="logout()" style="border: 1px solid #444; padding: 5px 12px; border-radius: 6px;">Logout</button>
+        </div>
+    </nav>
+
     <div id="login-screen">
-        <div class="login-box">
-            <h2>User Login</h2>
-            <input type="password" id="user-pass" placeholder="Password">
-            <button onclick="attemptLogin()">Unlock Blog</button>
+        <div class="auth-box">
+            <h2>Louis in Korea</h2>
+            <input type="email" id="auth-email" placeholder="Email">
+            <input type="password" id="auth-pass" placeholder="Password">
+            <button class="primary-btn" onclick="handleAuth()">Sign In</button>
+            <button class="request-btn" onclick="window.location.href='mailto:loulounmt@protonmail.com'">Request Access</button>
         </div>
     </div>
 
-    <div id="posts-tab"></div>
+    <div id="lightbox" onclick="closeLightbox(event)">
+        <span class="close-lb" onclick="document.getElementById('lightbox').style.display='none'">&times;</span>
+        <div id="lightbox-content" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <div id="posts-tab" class="tab-content active-tab"></div>
+
+    <div id="config-tab" class="tab-content">
+        <div style="background: var(--card); padding: 40px; border-radius: 24px; border: 1px solid #333; text-align: center;">
+            <h3>Profile Config</h3>
+            <img id="my-avatar-preview" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 25px; border: 3px solid var(--accent);">
+            <br>
+            <label style="background: #333; color: white; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 600;" for="avatar-file">Change Photo</label>
+            <input type="file" id="avatar-file" style="display:none" accept="image/*" onchange="updateAvatar()">
+        </div>
+    </div>
 
     <script>
         const pb = new PocketBase('https://knewsnotnotmuch.duckdns.org');
         let playerInstances = {};
         let currentPlayingId = null;
 
-        async function attemptLogin() {
-            const pass = document.getElementById('user-pass').value;
+        if (pb.authStore.isValid) showApp();
+
+        async function handleAuth() {
             try {
-                await pb.collection('users').authWithPassword('loulounmt@protonmail.com', pass);
-                document.getElementById('login-screen').style.display = 'none';
-                loadPosts();
-            } catch (e) { alert("Access Denied"); }
+                await pb.collection('users').authWithPassword(document.getElementById('auth-email').value, document.getElementById('auth-pass').value);
+                showApp();
+            } catch (e) { alert("Login failed"); }
+        }
+
+        function showApp() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('sticky-nav').style.display = 'flex';
+            loadProfileData();
+            loadPosts();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById(tab + '-tab').classList.add('active-tab');
         }
 
         async function loadPosts() {
             const container = document.getElementById('posts-tab');
-            container.style.display = 'flex';
+            const records = await pb.collection('posts').getFullList({ sort: '-date', expand: 'comments_via_post.user' });
+            container.innerHTML = '';
 
-            try {
-                const records = await pb.collection('posts').getFullList({ sort: '-date' });
+            records.forEach(record => {
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                
+                const photos = record.photos || [];
+                const imagesHtml = photos.map(pic => `<img src="${pb.files.getUrl(record, pic)}" onclick="openFocus('${record.id}')">`).join('');
+                const dotsHtml = photos.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${record.id}-${i}"></div>`).join('');
 
-                records.forEach(record => {
-                    const card = document.createElement('div');
-                    card.className = 'post-card';
+                const comments = (record.expand?.comments_via_post || []).sort((a,b) => new Date(a.date) - new Date(b.date));
+                const commentsHtml = comments.map(c => {
+                    const u = c.expand?.user || { username: 'Friend' };
+                    const ava = u.avatar ? pb.files.getUrl(u, u.avatar) : `https://ui-avatars.com/api/?name=${u.username}`;
+                    return `<div class="comment-item"><img class="user-avatar" src="${ava}"><div class="comment-content"><span style="font-weight:bold; color:crimson; display:block;">${u.username}</span>${c.text}</div></div>`;
+                }).join('');
 
-                    // Carousel Logic
-                    let photosHtml = '';
-                    if (record.photos && record.photos.length > 0) {
-                        const hasMany = record.photos.length > 1;
-                        photosHtml = `
-                            <div class="slider-container">
-                                ${hasMany ? `<button class="nav-arrow prev-arrow" onclick="moveSlider('${record.id}', -1)">❮</button>` : ''}
-                                <div class="slider" id="slider-${record.id}">
-                                    ${record.photos.map(file => `<img src="${pb.files.getUrl(record, file)}" loading="lazy">`).join('')}
-                                </div>
-                                ${hasMany ? `<button class="nav-arrow next-arrow" onclick="moveSlider('${record.id}', 1)">❯</button>` : ''}
-                                <div class="dots" id="dots-${record.id}">
-                                    ${record.photos.map((_, i) => `<div class="dot ${i===0?'active':''}" onclick="scrollToImage('${record.id}', ${i})"></div>`).join('')}
-                                </div>
-                            </div>`;
-                    }
-
-                    card.innerHTML = `
-                        ${photosHtml}
-                        <div class="post-header">${new Date(record.date).toLocaleDateString('fr-FR')}</div>
-                        <div class="post-body">${record.description}</div>
-                        ${record.musicLink ? `
-                            <div class="audio-bar">
-                                <div class="song-title" id="title-${record.id}">Retrieving song info...</div>
-                                <button class="play-btn" id="btn-${record.id}" onclick="togglePlay('${record.id}')">PLAY</button>
-                                <div class="hidden-video" id="player-${record.id}"></div>
-                            </div>
-                        ` : ''}
-                    `;
-                    container.appendChild(card);
-
-                    // Scroll Spy for Dots
-                    if (record.photos?.length > 1) {
-                        const s = document.getElementById(`slider-${record.id}`);
-                        const d = document.getElementById(`dots-${record.id}`).children;
-                        s.addEventListener('scroll', () => {
-                            const idx = Math.round(s.scrollLeft / s.offsetWidth);
-                            Array.from(d).forEach((dot, i) => dot.classList.toggle('active', i === idx));
-                        });
-                    }
-
-                    if (record.musicLink) initHiddenPlayer(record.id, record.musicLink);
-                });
-            } catch (err) { console.error(err); }
+                postCard.innerHTML = `
+                    <div class="slider-wrapper" id="wrap-${record.id}">
+                        <button class="nav-arrow prev-arrow" onclick="slide('${record.id}', -1)">❮</button>
+                        <div class="slider" id="slider-${record.id}" onscroll="updateDots('${record.id}')">
+                            ${imagesHtml}
+                        </div>
+                        <button class="nav-arrow next-arrow" onclick="slide('${record.id}', 1)">❯</button>
+                        <div class="dots-container">${dotsHtml}</div>
+                    </div>
+                    <div class="post-body">
+                        <small style="color:#666">${new Date(record.date).toLocaleDateString('en-US', {dateStyle: 'long'})}</small>
+                        <p>${record.description}</p>
+                    </div>
+                    ${record.musicLink ? `<div class="audio-bar"><div class="song-title" id="title-${record.id}">...</div><button class="play-btn" id="btn-${record.id}" onclick="togglePlay('${record.id}')">▶ PLAY</button><div style="display:none" id="player-${record.id}"></div></div>` : ''}
+                    <div class="comments-section">
+                        <div class="comment-list">${commentsHtml}</div>
+                        <div style="display:flex; gap:10px; margin-top:20px;">
+                            <input type="text" id="in-${record.id}" placeholder="Comment..." style="margin:0">
+                            <button onclick="sendComment('${record.id}')" class="primary-btn" style="width:auto; padding:0 25px;">Send</button>
+                        </div>
+                    </div>`;
+                
+                container.appendChild(postCard);
+                if (record.musicLink) initPlayer(record.id, record.musicLink);
+            });
         }
 
-        // Carousel Functions
-        function moveSlider(id, dir) {
-            const s = document.getElementById(`slider-${id}`);
-            s.scrollBy({ left: dir * s.offsetWidth, behavior: 'smooth' });
-        }
-        function scrollToImage(id, idx) {
-            const s = document.getElementById(`slider-${id}`);
-            s.scrollTo({ left: idx * s.offsetWidth, behavior: 'smooth' });
+        function openFocus(postId) {
+            const originalWrapper = document.getElementById('wrap-' + postId);
+            const focusWrapper = originalWrapper.cloneNode(true);
+            
+            // Clean up cloned structure
+            focusWrapper.removeAttribute('id');
+            const slider = focusWrapper.querySelector('.slider');
+            slider.removeAttribute('id');
+            
+            // Manually re-attach click events to the CLONED arrows
+            const prevBtn = focusWrapper.querySelector('.prev-arrow');
+            const nextBtn = focusWrapper.querySelector('.next-arrow');
+            const dots = focusWrapper.querySelectorAll('.dot');
+
+            prevBtn.onclick = (e) => { e.stopPropagation(); slider.scrollBy({ left: -slider.offsetWidth, behavior: 'smooth' }); };
+            nextBtn.onclick = (e) => { e.stopPropagation(); slider.scrollBy({ left: slider.offsetWidth, behavior: 'smooth' }); };
+
+            slider.onscroll = () => {
+                const index = Math.round(slider.scrollLeft / slider.offsetWidth);
+                dots.forEach((d, i) => d.classList.toggle('active', i === index));
+            };
+            
+            // Close when clicking an image inside focus
+            slider.querySelectorAll('img').forEach(img => {
+                img.onclick = () => document.getElementById('lightbox').style.display = 'none';
+            });
+
+            const content = document.getElementById('lightbox-content');
+            content.innerHTML = '';
+            content.appendChild(focusWrapper);
+            document.getElementById('lightbox').style.display = 'flex';
         }
 
-        // YouTube Audio Functions
-        function initHiddenPlayer(id, url) {
-            const videoId = url.match(/(?:v=|\/|music\.youtube\.com\/watch\?v=)([0-9A-Za-z_-]{11})/)?.[1];
+        function closeLightbox(e) { if(e.target.id === 'lightbox') e.target.style.display = 'none'; }
+
+        function slide(id, dir) {
+            const s = document.getElementById('slider-' + id);
+            s.scrollBy({ left: s.offsetWidth * dir, behavior: 'smooth' });
+        }
+
+        function updateDots(id) {
+            const s = document.getElementById('slider-' + id);
+            if (!s) return;
+            const index = Math.round(s.scrollLeft / s.offsetWidth);
+            document.querySelectorAll(`#wrap-${id} .dot`).forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+
+        function initPlayer(id, url) {
+            const videoId = url.match(/(?:v=|youtu\.be\/|embed\/|watch\?v%3D|&v=)([a-zA-Z0-9_-]{11})/)?.[1];
             if (!videoId) return;
-
             playerInstances[id] = new YT.Player(`player-${id}`, {
-                height: '200', width: '200',
-                videoId: videoId,
-                playerVars: { 'origin': window.location.origin },
+                height: '0', width: '0', videoId: videoId,
                 events: {
-                    'onReady': (event) => {
-                        const title = event.target.getVideoData().title;
-                        document.getElementById(`title-${id}`).innerText = title || "YouTube Track";
-                    },
-                    'onStateChange': (event) => {
-                        const btn = document.getElementById(`btn-${id}`);
-                        btn.innerHTML = (event.data === YT.PlayerState.PLAYING) ? "⏸ PAUSE" : "▶ PLAY";
+                    'onReady': (e) => { document.getElementById(`title-${id}`).innerText = e.target.getVideoData().title; },
+                    'onStateChange': (e) => {
+                        document.getElementById(`btn-${id}`).innerHTML = (e.data === YT.PlayerState.PLAYING) ? "⏸ PAUSE" : "▶ PLAY";
                     }
                 }
             });
         }
 
         function togglePlay(id) {
-            const player = playerInstances[id];
-            if (!player) return;
-            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-            } else {
-                if (currentPlayingId && currentPlayingId !== id && playerInstances[currentPlayingId]) {
-                    playerInstances[currentPlayingId].pauseVideo();
-                }
-                player.playVideo();
+            const p = playerInstances[id];
+            if (p?.getPlayerState() === YT.PlayerState.PLAYING) p.pauseVideo();
+            else {
+                if (currentPlayingId && currentPlayingId !== id) playerInstances[currentPlayingId]?.pauseVideo();
+                p.playVideo();
                 currentPlayingId = id;
             }
         }
+
+        async function sendComment(postId) {
+            const input = document.getElementById('in-' + postId);
+            if (!input.value) return;
+            await pb.collection('comments').create({ user: pb.authStore.model.id, post: postId, text: input.value, date: new Date().toISOString() });
+            input.value = '';
+            loadPosts();
+        }
+
+        function loadProfileData() {
+            const u = pb.authStore.model;
+            document.getElementById('my-avatar-preview').src = u.avatar ? pb.files.getUrl(u, u.avatar) : `https://ui-avatars.com/api/?name=${u.username}`;
+        }
+
+        async function updateAvatar() {
+            const f = new FormData(); f.append('avatar', document.getElementById('avatar-file').files[0]);
+            const updatedUser = await pb.collection('users').update(pb.authStore.model.id, f);
+            pb.authStore.save(pb.authStore.token, updatedUser); 
+            loadProfileData();
+            alert("Avatar updated!");
+        }
+
+        function logout() { pb.authStore.clear(); window.location.reload(); }
     </script>
 </body>
 </html>
