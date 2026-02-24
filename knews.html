@@ -49,6 +49,9 @@
         .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 50%; }
         .dot.active { background: var(--accent); width: 20px; border-radius: 4px; transition: 0.3s; }
 
+        /* Text Fixes (Line breaks) */
+        .post-body p, .comment-text { white-space: pre-line; word-break: break-word; }
+
         .post-body { padding: 35px; line-height: 1.8; font-size: 1.1rem; }
         .audio-bar { background: #111; padding: 25px; display: flex; flex-direction: column; align-items: center; gap: 10px; border-top: 1px solid #333; }
         .play-btn { background: var(--accent); border: none; color: white; padding: 12px 30px; border-radius: 40px; cursor: pointer; font-weight: bold; }
@@ -61,9 +64,20 @@
         #lightbox .nav-arrow { opacity: 1; pointer-events: auto; }
         .close-lb { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; z-index: 2100; }
 
+        /* Comments Scroller */
         .comments-section { background: #151515; padding: 30px; border-top: 1px solid #333; }
+        .comment-list { 
+            max-height: 300px; 
+            overflow-y: auto; 
+            padding-right: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #444 transparent;
+        }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+
         .comment-item { display: flex; gap: 15px; margin-bottom: 20px; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #333; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #333; flex-shrink: 0; }
         .comment-content { background: #222; padding: 12px 18px; border-radius: 18px; flex: 1; border: 1px solid #333; }
 
         @media (max-width: 1024px) { .tab-content { width: 95vw; } .nav-arrow { display: none; } }
@@ -112,6 +126,14 @@
         let playerInstances = {};
         let currentPlayingId = null;
 
+        // XSS Protection: Escapes dangerous characters
+        function sanitize(str) {
+            if (!str) return "";
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
+
         if (pb.authStore.isValid) showApp();
 
         async function handleAuth() {
@@ -131,6 +153,9 @@
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
             document.getElementById(tab + '-tab').classList.add('active-tab');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('onclick').includes(tab));
+            });
         }
 
         async function loadPosts() {
@@ -150,7 +175,9 @@
                 const commentsHtml = comments.map(c => {
                     const u = c.expand?.user || { username: 'Friend' };
                     const ava = u.avatar ? pb.files.getUrl(u, u.avatar) : `https://ui-avatars.com/api/?name=${u.username}`;
-                    return `<div class="comment-item"><img class="user-avatar" src="${ava}"><div class="comment-content"><span style="font-weight:bold; color:crimson; display:block;">${u.name}</span>${c.text}</div></div>`;
+                    const safeName = sanitize(u.name || u.username);
+                    const safeText = sanitize(c.text);
+                    return `<div class="comment-item"><img class="user-avatar" src="${ava}"><div class="comment-content"><span style="font-weight:bold; color:var(--accent); display:block;">${safeName}</span><div class="comment-text">${safeText}</div></div></div>`;
                 }).join('');
 
                 postCard.innerHTML = `
@@ -164,11 +191,11 @@
                     </div>
                     <div class="post-body">
                         <small style="color:#666">${new Date(record.date).toLocaleDateString('en-US', {dateStyle: 'long'})}</small>
-                        <p>${record.description}</p>
+                        <p>${sanitize(record.description)}</p>
                     </div>
                     ${record.musicLink ? `<div class="audio-bar"><div class="song-title" id="title-${record.id}">...</div><button class="play-btn" id="btn-${record.id}" onclick="togglePlay('${record.id}')">▶ PLAY</button><div style="display:none" id="player-${record.id}"></div></div>` : ''}
                     <div class="comments-section">
-                        <div class="comment-list">${commentsHtml}</div>
+                        <div class="comment-list" id="list-${record.id}">${commentsHtml}</div>
                         <div style="display:flex; gap:10px; margin-top:20px;">
                             <input type="text" id="in-${record.id}" placeholder="Comment..." style="margin:0">
                             <button onclick="sendComment('${record.id}')" class="primary-btn" style="width:auto; padding:0 25px;">Send</button>
@@ -177,19 +204,20 @@
                 
                 container.appendChild(postCard);
                 if (record.musicLink) initPlayer(record.id, record.musicLink);
+                
+                // Auto-scroll scroller to bottom for new comments
+                const list = document.getElementById(`list-${record.id}`);
+                list.scrollTop = list.scrollHeight;
             });
         }
 
         function openFocus(postId) {
             const originalWrapper = document.getElementById('wrap-' + postId);
             const focusWrapper = originalWrapper.cloneNode(true);
-            
-            // Clean up cloned structure
             focusWrapper.removeAttribute('id');
             const slider = focusWrapper.querySelector('.slider');
             slider.removeAttribute('id');
             
-            // Manually re-attach click events to the CLONED arrows
             const prevBtn = focusWrapper.querySelector('.prev-arrow');
             const nextBtn = focusWrapper.querySelector('.next-arrow');
             const dots = focusWrapper.querySelectorAll('.dot');
@@ -202,7 +230,6 @@
                 dots.forEach((d, i) => d.classList.toggle('active', i === index));
             };
             
-            // Close when clicking an image inside focus
             slider.querySelectorAll('img').forEach(img => {
                 img.onclick = () => document.getElementById('lightbox').style.display = 'none';
             });
@@ -253,10 +280,17 @@
 
         async function sendComment(postId) {
             const input = document.getElementById('in-' + postId);
-            if (!input.value) return;
-            await pb.collection('comments').create({ user: pb.authStore.model.id, post: postId, text: input.value, date: new Date().toISOString() });
-            input.value = '';
-            loadPosts();
+            if (!input.value.trim()) return;
+            try {
+                await pb.collection('comments').create({ 
+                    user: pb.authStore.model.id, 
+                    post: postId, 
+                    text: input.value, 
+                    date: new Date().toISOString() 
+                });
+                input.value = '';
+                loadPosts();
+            } catch (e) { alert("Error sending comment"); }
         }
 
         function loadProfileData() {
@@ -265,11 +299,16 @@
         }
 
         async function updateAvatar() {
-            const f = new FormData(); f.append('avatar', document.getElementById('avatar-file').files[0]);
-            const updatedUser = await pb.collection('users').update(pb.authStore.model.id, f);
-            pb.authStore.save(pb.authStore.token, updatedUser); 
-            loadProfileData();
-            alert("Avatar updated!");
+            const fileInput = document.getElementById('avatar-file');
+            if (!fileInput.files[0]) return;
+            const f = new FormData(); 
+            f.append('avatar', fileInput.files[0]);
+            try {
+                const updatedUser = await pb.collection('users').update(pb.authStore.model.id, f);
+                pb.authStore.save(pb.authStore.token, updatedUser); 
+                loadProfileData();
+                alert("Avatar updated!");
+            } catch (e) { alert("Failed to update avatar"); }
         }
 
         function logout() { pb.authStore.clear(); window.location.reload(); }
