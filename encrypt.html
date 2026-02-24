@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Générateur de Blog Chiffré</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+    <h2>1. Ton contenu (JSON)</h2>
+    <textarea id="data" rows="10" cols="50">
+[
+  {
+    "id": 1,
+    "date": "24 Février 2026",
+    "description": "Ma journée de muscu",
+    "bw": "75kg",
+    "ytId": "dQw4w9WgXcQ",
+    "photos": [{"url": "data:image/jpeg;base64,...", "desc": "Photo 1"}]
+  }
+]
+    </textarea>
+    
+    <h2>2. Ton Mot de Passe</h2>
+    <input type="text" id="pass" value="pomme">
+    
+    <button onclick="encrypt()">Générer le code pour GitHub</button>
+    
+    <h2>3. Résultat à copier sur GitHub</h2>
+    <textarea id="result" rows="10" cols="50" readonly></textarea>
+
+    <script>
+        function encrypt() {
+            const data = document.getElementById('data').value;
+            const pw = document.getElementById('pass').value;
+            const encrypted = CryptoJS.AES.encrypt(data, pw).toString();
+            document.getElementById('result').value = encrypted;
+        }
+    </script>
+</body>
+</html>
