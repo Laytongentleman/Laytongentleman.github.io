@@ -150,7 +150,7 @@
                 const commentsHtml = comments.map(c => {
                     const u = c.expand?.user || { username: 'Friend' };
                     const ava = u.avatar ? pb.files.getUrl(u, u.avatar) : `https://ui-avatars.com/api/?name=${u.username}`;
-                    return `<div class="comment-item"><img class="user-avatar" src="${ava}"><div class="comment-content"><span style="font-weight:bold; color:crimson; display:block;">${u.username}</span>${c.text}</div></div>`;
+                    return `<div class="comment-item"><img class="user-avatar" src="${ava}"><div class="comment-content"><span style="font-weight:bold; color:crimson; display:block;">${u.name}</span>${c.text}</div></div>`;
                 }).join('');
 
                 postCard.innerHTML = `
