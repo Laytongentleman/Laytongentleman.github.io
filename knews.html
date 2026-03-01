@@ -168,7 +168,7 @@
                 postCard.className = 'post-card';
                 
                 const photos = record.photos || [];
-                const imagesHtml = photos.map(pic => `<img loading="lazy" src="${pb.files.getUrl(record, pic)}" onclick="openFocus('${record.id}')">`).join('');
+                const imagesHtml = photos.map(pic => `<img loading="lazy" src="${pb.files.getUrl(record, pic)}?thumb=720x480" onclick="openFocus('${record.id}')">`).join('');
                 const dotsHtml = photos.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${record.id}-${i}"></div>`).join('');
 
                 const comments = (record.expand?.comments_via_post || []).sort((a,b) => new Date(a.date) - new Date(b.date));
