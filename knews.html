@@ -278,20 +278,29 @@
             }
         }
 
-        async function sendComment(postId) {
-            const input = document.getElementById('in-' + postId);
-            if (!input.value.trim()) return;
-            try {
-                await pb.collection('comments').create({ 
-                    user: pb.authStore.model.id, 
-                    post: postId, 
-                    text: input.value, 
-                    date: new Date().toISOString() 
-                });
-                input.value = '';
-                loadPosts();
-            } catch (e) { alert("Error sending comment"); }
-        }
+async function sendComment(postId) {
+    const input = document.getElementById('in-' + postId);
+    if (!input.value.trim()) return;
+
+    try {
+        await pb.collection('comments').create({ 
+            user: pb.authStore.model.id, 
+            post: postId, 
+            text: input.value
+        });
+
+        input.value = '';
+
+        const scrollPos = window.scrollY;
+
+        await loadPosts(); 
+
+        window.scrollTo(0, scrollPos);
+
+    } catch (e) { 
+        alert("Error sending comment"); 
+    }
+}
 
         function loadProfileData() {
             const u = pb.authStore.model;
